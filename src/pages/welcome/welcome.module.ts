@@ -7,6 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { WelcomePageRoutingModule } from './welcome-routing.module';
 
 import { WelcomePage } from './welcome.page';
+import { AuthService } from 'src/services/auth.service';
+import { GoogleLogin } from 'src/mocks/googleLogin';
+import { FirebaseService } from 'src/services/firebase.service';
 
 @NgModule({
   imports: [
@@ -15,6 +18,11 @@ import { WelcomePage } from './welcome.page';
     IonicModule,
     WelcomePageRoutingModule
   ],
-  declarations: [WelcomePage]
+  declarations: [WelcomePage],
+  providers:[
+    GoogleLogin,
+    AuthService,
+    FirebaseService
+  ]
 })
 export class WelcomePageModule {}
