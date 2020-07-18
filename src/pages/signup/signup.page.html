@@ -6,36 +6,36 @@
         <form [formGroup]="signupForm">
             <ion-list  class="ion-padding">
               <ion-item class="mb-m">
-                <ion-input autocapitalize="on" formControlName="name" placeholder="Nombre" type="text">
+                <ion-input autocapitalize="on" formControlName="name" [placeholder]="'NAME' | translate" type="text">
                 </ion-input>
-                <small class="no-valid" *ngIf="nameIsNoValid">Nombre requerido</small>
+                <small class="no-valid" *ngIf="nameIsNoValid">{{'NAME_NO_VALID' | translate}}</small>
               </ion-item>
               <ion-item class="mb-m">
-                <ion-input autocapitalize="on" formControlName="lastname" placeholder="Apellidos" type="text">
+                <ion-input autocapitalize="on" formControlName="lastname" [placeholder]="'LASTNAME' | translate" type="text">
                 </ion-input>
-                <small class="no-valid" *ngIf="lastnameIsNoValid">Apellidos requeridos</small>
+                <small class="no-valid" *ngIf="lastnameIsNoValid">{{'LASTNAME_NO_VALID' | translate}}</small>
               </ion-item>
               <ion-item class="mb-m" >
-                <ion-input autocapitalize="on" formControlName="email" placeholder="Email" type="email">
+                <ion-input autocapitalize="on" formControlName="email" [placeholder]="'EMAIL' | translate" type="email">
                 </ion-input>
-                <small class="no-valid" *ngIf="emailIsNoValid">Email no valido</small>
+                <small class="no-valid" *ngIf="emailIsNoValid">{{'EMAIL_NO_VALID' | translate}}</small>
               </ion-item>
               <ion-item class="mb-m">
-                <ion-input autocapitalize="on" formControlName="password" placeholder="Contraseña" type="{{hidePassword ? 'password' : 'text'}}">
+                <ion-input autocapitalize="on" formControlName="password" [placeholder]="'PASSWORD' | translate" type="{{hidePassword ? 'password' : 'text'}}">
                 </ion-input>
                 <ion-icon (click)="changeVisiblityPass()" 
                 name="{{hidePassword ? 'eye-off-outline' : 'eye-outline'}}"></ion-icon>
               </ion-item>
               <ion-item class="mb-m">
-                <ion-input autocapitalize="on" formControlName="confirmPassword" placeholder="Confirma la contraseña" type="{{hidePassword ? 'password' : 'text'}}">
+                <ion-input autocapitalize="on" formControlName="confirmPassword" [placeholder]="'CONFIRM_PASSWORD' | translate" type="{{hidePassword ? 'password' : 'text'}}">
                 </ion-input>
                 <ion-icon (click)="changeVisiblityPass()" 
                 name="{{hidePassword ? 'eye-off-outline' : 'eye-outline'}}"></ion-icon>
               </ion-item>
-              <small class="no-valid mr-m" *ngIf="passwordsNotMatch">Contraseñas no coinciden</small>
+              <small class="no-valid mr-m" *ngIf="passwordsNotMatch">{{'PASSWORD_NO_MATCH' | translate}}</small>
             </ion-list>
             <section class="full-width p-l">
-              <ion-button (click)="signUp()"  [disabled]="signupForm.invalid || signupForm.untouched"  expand="block" >Registrarme
+              <ion-button (click)="signUp()"  [disabled]="signupForm.invalid || signupForm.untouched"  expand="block" >{{'SIGNUP' | translate}}
               </ion-button>
             </section>
           </form>

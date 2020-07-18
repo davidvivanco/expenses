@@ -6,7 +6,7 @@
     <form [formGroup]="loginForm">
       <ion-list class="ion-padding">
         <ion-item class="mb-m">
-          <ion-input autocapitalize="on" formControlName="email" [placeholder]="'EMAIL' | translate" type="text">
+          <ion-input autocapitalize="on" formControlName="email" [placeholder]="'EMAIL' | translate" type="email">
           </ion-input>
           <small class="no-valid" *ngIf="emailIsNoValid">{{'EMAIL_NO_VALID' | translate}}</small>
         </ion-item>

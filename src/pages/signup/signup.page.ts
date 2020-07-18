@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from 'src/validators/custom-validators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signup',
@@ -13,8 +14,12 @@ export class SignupPage implements OnInit {
   private hidePassword: boolean;
 
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    public translateService: TranslateService
+    ) {
     this.hidePassword = true;
+    this.translateService.setDefaultLang('es');
   }
 
   ngOnInit() {

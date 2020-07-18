@@ -1,0 +1,12 @@
+{
+  "NAME": "Nombre",
+  "LASTNAME": "Apellidos",
+  "EMAIL": "Email",
+  "PASSWORD": "Contraseña", 
+  "CONFIRM_PASSWORD": "Confirma la contraseña", 
+  "SIGNUP": "Registrate",
+  "NAME_NO_VALID": "Nombre requerido",
+  "LASTNAME_NO_VALID": "Apellidos requeridos",
+  "EMAIL_NO_VALID": "Email no valido",
+  "PASSWORD_NO_MATCH": "Las contraseñas no coinciden"
+}

@@ -1,0 +1,12 @@
+{
+  "NAME": "Name",
+  "LASTNAME": "Lastname",
+  "EMAIL": "Email",
+  "PASSWORD": "Password", 
+  "CONFIRM_PASSWORD": "Confirm password", 
+  "SIGNUP": "Sign up",
+  "NAME_NO_VALID": "Name required",
+  "LASTNAME_NO_VALID": "Lastname required",
+  "EMAIL_NO_VALID": "Email no valid",
+  "PASSWORD_NO_MATCH": "Passwords no match"
+}
