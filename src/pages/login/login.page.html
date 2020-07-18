@@ -6,21 +6,21 @@
     <form [formGroup]="loginForm">
       <ion-list class="ion-padding">
         <ion-item class="mb-m">
-          <ion-input autocapitalize="on" formControlName="email" placeholder="Email" type="text">
+          <ion-input autocapitalize="on" formControlName="email" [placeholder]="'EMAIL' | translate" type="text">
           </ion-input>
-          <small class="no-valid" *ngIf="emailIsNoValid">Email no valido</small>
+          <small class="no-valid" *ngIf="emailIsNoValid">{{'EMAIL_NO_VALID' | translate}}</small>
         </ion-item>
         <ion-item class="mb-m">
-          <ion-input autocapitalize="on" formControlName="password" placeholder="Contraseña"
+          <ion-input autocapitalize="on" formControlName="password" [placeholder]="'PASSWORD' | translate"
             type="{{hidePassword ? 'password' : 'text'}}">
           </ion-input>
-          <small class="no-valid mr-m" *ngIf="passwordIsNoValid">Contraseña requerida</small>
+          <small class="no-valid mr-m" *ngIf="passwordIsNoValid">{{'PASSWORD_NO_VALID' | translate}}</small>
           <ion-icon (click)="changeVisiblityPass()" name="{{hidePassword ? 'eye-off-outline' : 'eye-outline'}}">
           </ion-icon>
         </ion-item>
       </ion-list>
       <section class="full-width p-l">
-        <ion-button expand="block">Acceder
+        <ion-button expand="block">{{'LOGIN' | translate}}
         </ion-button>
       </section>
     </form>

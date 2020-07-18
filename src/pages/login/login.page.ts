@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -13,9 +14,11 @@ export class LoginPage implements OnInit {
 
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public translateService: TranslateService
   ) {
     this.hidePassword = true;
+    this.translateService.setDefaultLang('es');
    }
 
   ngOnInit() {

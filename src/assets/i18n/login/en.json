@@ -1,0 +1,7 @@
+{
+  "EMAIL": "Email",
+  "PASSWORD": "Password",
+  "LOGIN": "Login",
+  "EMAIL_NO_VALID": "Invalid email",
+  "PASSWORD_NO_VALID": "Password required"
+}

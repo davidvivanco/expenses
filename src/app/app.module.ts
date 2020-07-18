@@ -14,6 +14,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
 
 
 @NgModule({
@@ -21,14 +29,23 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
   entryComponents: [],
   imports: [
     BrowserModule,
-     IonicModule.forRoot(), 
-     IonicStorageModule.forRoot(),
-     
-     AppRoutingModule,
-     AngularFireAuthModule,
-     AngularFirestoreModule,
-     AngularFireModule.initializeApp(environment.firebaseConfig)
-    ],
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
+      },
+      isolate: true
+
+    }),
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    AppRoutingModule,
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig)
+  ],
   providers: [
     StatusBar,
     GooglePlus,
@@ -37,4 +54,4 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
