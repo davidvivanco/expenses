@@ -1,0 +1,51 @@
+
+  // Animations
+
+  .animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.animated.fast {
+    -webkit-animation-duration: 700ms;
+    animation-duration: 700ms;
+}
+
+  @-webkit-keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+  }
+
+
+  ion-tab-button {
+    --ripple-color: var(--ion-color-medium);
+    --color: var(--ion-color-dark);
+    --color-selected: var(--ion-color-medium);
+  }
+  
+  ion-tab-button.tab-selected {
+    --background: var(--ion-color-main) !important;
+    --color-selected: var(--ion-color-light);
+  }

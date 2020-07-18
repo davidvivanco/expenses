@@ -6,6 +6,7 @@ import { GoogleResponse } from 'src/models/interfaces/google-response.interface'
 import { FirebaseService } from 'src/services/firebase.service';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/models/interfaces/user.interface';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,22 +17,28 @@ import { User } from 'src/models/interfaces/user.interface';
 export class WelcomePage implements OnInit {
 
 
-  token: string;
+  private token: string;
 
   constructor(
     private authService: AuthService,
     private platform: Platform,
     private googleLogin: GoogleLogin,
     private firebaseService: FirebaseService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
+
   ) {
   }
 
   ngOnInit() {
   }
 
-  login() {
+  login(): void {
+    this.router.navigate(['login']);
+  }
 
+  signup(): void {
+    this.router.navigate(['signup']);
   }
 
   async loginWithGoogle() {

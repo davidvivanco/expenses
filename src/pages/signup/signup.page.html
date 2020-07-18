@@ -1,0 +1,44 @@
+<app-header></app-header>
+
+
+<ion-content class="animated fadeIn fast" scroll="false">
+    <div class="ion-padding">
+        <form [formGroup]="signupForm">
+            <ion-list  class="ion-padding">
+              <ion-item class="mb-m">
+                <ion-input autocapitalize="on" formControlName="name" placeholder="Nombre" type="text">
+                </ion-input>
+                <small class="no-valid" *ngIf="nameIsNoValid">Nombre requerido</small>
+              </ion-item>
+              <ion-item class="mb-m">
+                <ion-input autocapitalize="on" formControlName="lastname" placeholder="Apellidos" type="text">
+                </ion-input>
+                <small class="no-valid" *ngIf="lastnameIsNoValid">Apellidos requeridos</small>
+              </ion-item>
+              <ion-item class="mb-m" >
+                <ion-input autocapitalize="on" formControlName="email" placeholder="Email" type="email">
+                </ion-input>
+                <small class="no-valid" *ngIf="emailIsNoValid">Email no valido</small>
+              </ion-item>
+              <ion-item class="mb-m">
+                <ion-input autocapitalize="on" formControlName="password" placeholder="Contraseña" type="{{hidePassword ? 'password' : 'text'}}">
+                </ion-input>
+                <ion-icon (click)="changeVisiblityPass()" 
+                name="{{hidePassword ? 'eye-off-outline' : 'eye-outline'}}"></ion-icon>
+              </ion-item>
+              <ion-item class="mb-m">
+                <ion-input autocapitalize="on" formControlName="confirmPassword" placeholder="Confirma la contraseña" type="{{hidePassword ? 'password' : 'text'}}">
+                </ion-input>
+                <ion-icon (click)="changeVisiblityPass()" 
+                name="{{hidePassword ? 'eye-off-outline' : 'eye-outline'}}"></ion-icon>
+              </ion-item>
+              <small class="no-valid mr-m" *ngIf="passwordsNotMatch">Contraseñas no coinciden</small>
+            </ion-list>
+            <section class="full-width p-l">
+              <ion-button (click)="signUp()"  [disabled]="signupForm.invalid || signupForm.untouched"  expand="block" >Registrarme
+              </ion-button>
+            </section>
+          </form>
+    </div>
+  </ion-content>
+  

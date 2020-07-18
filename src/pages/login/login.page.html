@@ -1,0 +1,28 @@
+<app-header></app-header>
+
+
+<ion-content class="animated fadeIn fast" scroll="false">
+  <div class="login-container ion-padding">
+    <form [formGroup]="loginForm">
+      <ion-list class="ion-padding">
+        <ion-item class="mb-m">
+          <ion-input autocapitalize="on" formControlName="email" placeholder="Email" type="text">
+          </ion-input>
+          <small class="no-valid" *ngIf="emailIsNoValid">Email no valido</small>
+        </ion-item>
+        <ion-item class="mb-m">
+          <ion-input autocapitalize="on" formControlName="password" placeholder="Contraseña"
+            type="{{hidePassword ? 'password' : 'text'}}">
+          </ion-input>
+          <small class="no-valid mr-m" *ngIf="passwordIsNoValid">Contraseña requerida</small>
+          <ion-icon (click)="changeVisiblityPass()" name="{{hidePassword ? 'eye-off-outline' : 'eye-outline'}}">
+          </ion-icon>
+        </ion-item>
+      </ion-list>
+      <section class="full-width p-l">
+        <ion-button expand="block">Acceder
+        </ion-button>
+      </section>
+    </form>
+  </div>
+</ion-content>

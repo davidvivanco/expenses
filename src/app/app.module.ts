@@ -23,6 +23,7 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
     BrowserModule,
      IonicModule.forRoot(), 
      IonicStorageModule.forRoot(),
+     
      AppRoutingModule,
      AngularFireAuthModule,
      AngularFirestoreModule,
