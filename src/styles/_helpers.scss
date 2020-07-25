@@ -157,9 +157,17 @@
     padding-bottom: 0;
   }
   
-
   .no-valid{
     color: #eb445a;
+  }
+
+  .center{
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 
   

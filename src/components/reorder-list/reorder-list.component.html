@@ -1,0 +1,17 @@
+<ion-content class="animated fadeIn fast" scroll="true">
+<ion-list class="animated fadeIn fast">
+  <ion-reorder-group [disabled]="false" (ionItemReorder)="reorder($event)">
+    <ion-card *ngFor="let item of items"  button="true" (click)="goToDetails(item)">
+      <ion-item>
+        <ion-label>
+          <strong class="capitalize">
+            {{item.name}}
+            <ion-icon class="ml-m" [name]="item.icon"></ion-icon>
+          </strong>
+        </ion-label>
+        <ion-reorder slot="end">
+        </ion-reorder>
+      </ion-item>
+    </ion-card>
+  </ion-reorder-group>
+</ion-list>

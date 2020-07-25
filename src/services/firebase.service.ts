@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -18,11 +19,10 @@ export class FirebaseService {
     })
   }
 
-  getOne(collection: string, query: [string, string, string | Array<string>]) {
+  getUser(collection: string, userId: string) {
     return new Promise((resolve, reject) => {
-      this.db.collection(collection, ref => ref.where(query[0], '==', query[2])).valueChanges()
+      this.db.collection(collection, ref => ref.where('id', '==', userId)).valueChanges()
         .subscribe((res: any) => {
-          console.log('getOne', res);
           if (res.length === 1) resolve(res[0]);
           if (res.length === 0) resolve(null);
           if (res.length > 1) reject('This shouldnt be happen');
@@ -30,4 +30,21 @@ export class FirebaseService {
 
     })
   }
+
+  findBy(collection: string, query: [string, any, string | number | string[]]): Observable<any> {
+    return this.db.collection(collection, ref => ref.where(query[0], query[1], query[2])).valueChanges()
+  }
+
+  updateById(collection: string, id: string,data:object) {
+    console.log(id);
+    return new Promise((resolve, reject) => {
+      this.db.collection(collection)
+        .doc(id)
+        .update(data)
+        .then(res => {
+          resolve(res);
+        })
+    })
+  }
+
 }

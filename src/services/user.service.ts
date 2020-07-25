@@ -8,20 +8,30 @@ import { Storage } from '@ionic/storage';
 })
 export class UserService {
 
-  constructor(private storage: Storage) { }
+  constructor(
+    private storage: Storage) { }
 
-  setUser(user: User): void {
-    this.storage.set('user', user);
+  setUser(user: User) {
+    return new Promise((resolve, reject) => {
+      this.storage.set('user', user).then((user) => {
+        resolve(user)
+      });
+    })
+    //this.storage.set('user', user);
   }
 
-  setToken(token: string): void {
-    this.storage.set('token', token);
+  setToken(token: string) {
+    return new Promise((resolve, reject) => {
+      this.storage.set('token', token).then((token) => {
+        resolve(token)
+      });
+    })
+    // this.storage.set('token', token);
   }
 
   getUser(): Promise<User> {
     return new Promise((resolve, reject) => {
       this.storage.get('user').then((user) => {
-        console.log('Your user is', user);
         resolve(user)
       });
     })
@@ -30,7 +40,6 @@ export class UserService {
   getToken(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.storage.get('token').then((token) => {
-        console.log('Your token is', token);
         resolve(token)
       });
     })

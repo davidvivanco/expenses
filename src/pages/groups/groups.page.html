@@ -1,0 +1,9 @@
+<ion-content class="animated fadeIn fast">
+    <app-main-header [title]=title></app-main-header>
+    <app-reorder-list (onItemsOrderChanged)="reorderGroups()" [items]=groups></app-reorder-list>
+    <ion-fab class="mb-l" (click)="openAddGroupModal()" horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

@@ -12,7 +12,9 @@ export class AuthService {
     private googlePlus: GooglePlus
   ) { }
 
+  
   loginWithGoogle(): Promise<GoogleResponse> {
+    
     return new Promise((resolve, reject) => {
       this.googlePlus.login({})
         .then(res => resolve(res))

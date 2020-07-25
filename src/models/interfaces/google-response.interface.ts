@@ -7,5 +7,6 @@ export interface GoogleResponse {
     expires_in: number,
     familyName: string,
     givenName: string,
-    userId: string
+    userId: string,
+    imageUrl?:string
 }

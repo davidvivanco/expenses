@@ -65,8 +65,7 @@ export class SignupPage implements OnInit {
       })
   }
 
-  changeVisiblityPass() {
-    console.log('changeVisiblityPass');
+  changeVisiblityPass():void {
     this.hidePassword = !this.hidePassword;
   }
 

@@ -1,0 +1,10 @@
+<ion-header class="animated fadeIn fast" translucent class="ion-no-border">
+  <ion-toolbar class="mt-m">
+    <ion-title slot="start" size="small">{{title}}</ion-title>
+    <ion-buttons class="mr-m" slot="end">
+      <ion-avatar>
+        <img *ngIf="user" [src]="user.imageUrl" alt="">
+      </ion-avatar>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

@@ -18,6 +18,7 @@ export class WelcomePage implements OnInit {
 
 
   private token: string;
+  private showProgressBar: boolean
 
   constructor(
     private authService: AuthService,
@@ -28,6 +29,7 @@ export class WelcomePage implements OnInit {
     private router: Router
 
   ) {
+    this.showProgressBar = false;
   }
 
   ngOnInit() {
@@ -42,17 +44,30 @@ export class WelcomePage implements OnInit {
   }
 
   async loginWithGoogle() {
+    let user: User;
     if (this.platform.is('cordova')) {
       let loginGoogle = await this.authService.loginWithGoogle();
+      user = this.userBuilder(loginGoogle);
+      console.log(loginGoogle);
     } else {
       const googleLoginResponseMock = this.googleLogin.loginResponse;
       this.token = googleLoginResponseMock.accessToken;
-      const user: User = this.userBuilder(googleLoginResponseMock);
-      const userInDatabase = await this.firebaseService.getOne('users', ['id', '==', user.id]);
-      if (!userInDatabase) await this.firebaseService.insertOne('users', user);
-      this.setSessionStorage(this.token, user);
+      user = this.userBuilder(googleLoginResponseMock);
     }
+    this.showProgressBar = true;
+
+    const userInDatabase:any = await this.firebaseService.getUser('users', user.id);
+    console.log('DDBB',userInDatabase);
+    if (!userInDatabase){
+       await this.firebaseService.insertOne('users', user);
+       await this.setSessionStorage(this.token, user);
+    }else await this.setSessionStorage(this.token, userInDatabase);
+    this.showProgressBar = false;
+    this.router.navigate(['tabs']);
   }
+
+  
+  
 
   userBuilder(employeeData: GoogleResponse): User {
     return {
@@ -60,12 +75,13 @@ export class WelcomePage implements OnInit {
       name: employeeData.givenName,
       lastname: employeeData.familyName,
       email: employeeData.email,
+      imageUrl: employeeData.imageUrl
     }
   }
 
-  setSessionStorage(token: string, user: User): void {
-    this.userService.setUser(user);
-    this.userService.setToken(token);
+  async setSessionStorage(token: string, user: User) {
+    await this.userService.setUser(user);
+    await this.userService.setToken(token);
   }
 
 }
