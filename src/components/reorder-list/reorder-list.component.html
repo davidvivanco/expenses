@@ -1,17 +1,51 @@
 <ion-content class="animated fadeIn fast" scroll="true">
-<ion-list class="animated fadeIn fast">
-  <ion-reorder-group [disabled]="false" (ionItemReorder)="reorder($event)">
-    <ion-card *ngFor="let item of items"  button="true" (click)="goToDetails(item)">
-      <ion-item>
-        <ion-label>
-          <strong class="capitalize">
-            {{item.name}}
-            <ion-icon class="ml-m" [name]="item.icon"></ion-icon>
-          </strong>
-        </ion-label>
-        <ion-reorder slot="end">
-        </ion-reorder>
-      </ion-item>
-    </ion-card>
-  </ion-reorder-group>
-</ion-list>
+  <ion-list class="animated fadeIn fast">
+    <ion-reorder-group [disabled]="false" (ionItemReorder)="reorder($event)">
+      <ion-item-sliding #slidingItem *ngFor="let item of items;let i = index">
+        <ion-card button="true" (click)="clickOnCard(item,slidingItem)">
+
+          <ion-item-options side="end">
+            <ion-item-option  *ngIf="activityButton" color="warning" (click)="activity(item,slidingItem)">
+              <ion-icon name="pulse"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="success" (click)="details(item,slidingItem)">
+              <ion-icon name="eye"></ion-icon>
+            </ion-item-option>
+            <ion-item-option (click)="edit(item,slidingItem)">
+              <ion-icon name="create"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="delete(i,item)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+          <ion-item *ngIf="type === 'groups'">
+            <ion-label>
+              <strong class="capitalize">
+                {{item.name}}
+                <ion-icon class="ml-m" [name]="item.icon"></ion-icon>
+              </strong>
+            </ion-label>
+            <ion-reorder slot="end">
+              <ion-icon color="primary" name="arrow-back-outline"></ion-icon>
+            </ion-reorder>
+          </ion-item>
+
+          <ion-item *ngIf="type === 'users'">
+            <ion-label class="ml-m"> {{item.name}}</ion-label>
+            <ion-avatar slot="start">
+              <img *ngIf="item" [src]="item.imageUrl" alt="">
+            </ion-avatar>
+            <!-- <ion-label class="ml-m"><small> <strong> Total de gastos: {{item.totalExpenses}} €</strong> </small></ion-label> -->
+            <ion-icon class="ml-m" color="primary" name="arrow-back-outline"></ion-icon>
+          </ion-item>
+
+          <ion-item *ngIf="type === 'expenses'">
+            <ion-label>{{item.concept}} - <small> {{item.date.seconds *1000 | date: 'medium'}}</small></ion-label>
+            <p class="ml-m"> {{item.expense}}€</p>
+            <ion-icon class="ml-m" color="primary" name="arrow-back-outline"></ion-icon>
+          </ion-item>
+
+        </ion-card>
+      </ion-item-sliding>
+    </ion-reorder-group>
+  </ion-list>

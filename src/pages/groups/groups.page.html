@@ -1,9 +1,8 @@
 <ion-content class="animated fadeIn fast">
     <app-main-header [title]=title></app-main-header>
-    <app-reorder-list (onItemsOrderChanged)="reorderGroups()" [items]=groups></app-reorder-list>
-    <ion-fab class="mb-l" (click)="openAddGroupModal()" horizontal="end" vertical="bottom" slot="fixed">
-        <ion-fab-button>
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
+    <!-- <app-reorder-list [type]="type" [items]=groups (onDetails)="goToUsers($event)" (onDelete)="deleteGroup()" (onEdit)="editGroup($event)"
+    (onActivity)="goToActivity($event)" (onCardClick)="goToUsers($event)" (onItemsOrderChanged)="reorderGroups()">
+  </app-reorder-list> -->
+
+    <app-list [user]="user" [items]="groups" (onClick)="goToUsers($event)" (onClickMenu)="openMenuModal($event)"></app-list>
 </ion-content>

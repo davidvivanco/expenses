@@ -3,8 +3,11 @@ import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestor
 import { FirebaseService } from 'src/services/firebase.service';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/models/interfaces/user.interface';
-import { ModalController } from '@ionic/angular';
-import { AddGroupModalComponent } from './add-group-modal/add-group-modal.component';
+import { ModalController, IonItemSliding } from '@ionic/angular';
+import { AddGroupModalComponent } from './modals/add-group-modal/add-group-modal.component';
+import { UsersModalComponent } from './modals/users-modal/users-modal.component';
+import { ActivityModalComponent } from './modals/activity-modal/activity-modal.component';
+import { MenuModalComponent } from './modals/menu-modal/menu-modal.component';
 
 
 @Component({
@@ -26,7 +29,7 @@ export class GroupsPage {
     public modalController: ModalController
   ) {
     this.type = 'groups'
-    this.title = 'Grupos'
+    this.title = 'Mis grupos'
     this.getGroups().then();
   }
 
@@ -35,20 +38,34 @@ export class GroupsPage {
     this.firebaseService.findBy('groups', ['_id', 'in', this.user.groups]).subscribe((groups: any) => {
       this.groups = [];
       groups.forEach((group: any) => {
-         const index = this.user.groups.findIndex(g=> g === group._id);
-          this.groups[index] = group;
+        const index = this.user.groups.findIndex(g => g === group._id);
+        this.groups[index] = group;
       });
     });
   }
 
-  
+  async openModalController(options) {
+    const modal = await this.modalController.create(options);
+    return await modal.present();
+  }
+
+
   async openAddGroupModal() {
-    const modal = await this.modalController.create({
+    await this.openModalController({
       component: AddGroupModalComponent,
       cssClass: "animated",
       swipeToClose: true
     });
-    return await modal.present();
+  }
+
+
+  async openUsersModal(group) {
+    await this.openModalController({
+      component: UsersModalComponent,
+      cssClass: "animated",
+      swipeToClose: true,
+      componentProps: { group }
+    });
   }
 
   async reorderGroups() {
@@ -58,4 +75,43 @@ export class GroupsPage {
     this.userService.setUser(this.user);
   }
 
+  async goToUsers(e: EventResponse) {
+    // if (e.slidingItem) e.slidingItem.close();
+    await this.openUsersModal(e)
+  }
+
+  async openMenuModal(e) {
+    await this.openModalController({
+      component: MenuModalComponent,
+      cssClass: "animated",
+      swipeToClose: true,
+      componentProps: { group:e }
+    });
+  }
+
+  deleteGroup(e: EventResponse) {
+    console.log('delete', e);
+  }
+
+  editGroup(e: EventResponse) {
+    if (e.slidingItem) e.slidingItem.close();
+    console.log('edit', e);
+  }
+
+  async goToActivity(e: EventResponse) {
+    e.slidingItem.close();
+    console.log('activity', e);
+    await this.openModalController({
+      component: ActivityModalComponent,
+      cssClass: "animated",
+      swipeToClose: true,
+      componentProps: { group: e.item, user: this.user }
+    });
+  }
+
+}
+
+interface EventResponse {
+  item: any,
+  slidingItem: IonItemSliding
 }

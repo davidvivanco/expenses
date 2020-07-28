@@ -1,0 +1,33 @@
+<ion-content>
+    <app-modal-header [title]="''" (onCloseModal)="closeModal()"></app-modal-header>
+    <div class="menu-modal">
+        <ion-thumbnail style="width: 150px; height: 150px;">
+            <img src="https://lh3.googleusercontent.com/a-/AOh14GiN6tgdNmEYXGyyr_QFJQ2phLwgBfk_r7J6W6uTtA">
+        </ion-thumbnail>
+        <h4>{{group.name}}</h4>
+
+
+    </div>
+    <ion-list class="menu-modal" lines="none">
+        <ion-item (click)="openUsersModal()">
+            <ion-icon cp name="eye"></ion-icon>
+            <ion-label class="ml-m mb-m">Ver</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="create"></ion-icon>
+            <ion-label class="ml-m mb-m">Editar</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="trash"></ion-icon>
+            <ion-label class="ml-m mb-m">Eliminar</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="pulse"></ion-icon>
+            <ion-label class="ml-m mb-m">Actividad</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-icon name="person-add-outline"></ion-icon>
+            <ion-label class="ml-m mb-m">Añadir usuario</ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

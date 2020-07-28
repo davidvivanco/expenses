@@ -7,6 +7,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ReorderListComponent } from './reorder-list/reorder-list.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
 import { ModalHeaderComponent } from './modal-header/modal-header.component';
+import { ListComponent } from './list/list.component';
 
 
 
@@ -17,14 +18,16 @@ import { ModalHeaderComponent } from './modal-header/modal-header.component';
     ProgressBarComponent,
     ReorderListComponent,
     MainHeaderComponent,
-    ModalHeaderComponent
+    ModalHeaderComponent,
+    ListComponent
   ],
   exports: [
     HeaderComponent,
     ProgressBarComponent,
     ReorderListComponent,
     MainHeaderComponent,
-    ModalHeaderComponent
+    ModalHeaderComponent,
+    ListComponent
   ],
   imports: [
     CommonModule,

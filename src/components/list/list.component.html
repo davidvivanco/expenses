@@ -1,0 +1,47 @@
+<ion-list show-reorder="false">
+    <ion-item *ngIf="user" class="mb-s mt-l">
+        <!-- <ion-avatar slot="start">
+          <img *ngIf="user" [src]="user.imageUrl">
+        </ion-avatar> -->
+        <ion-label>
+            <h2>Crea nuevo grupo</h2>
+        </ion-label>
+        <ion-button class="mb-m" size="medium" color="primary" (click)="share(user)">
+            <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
+            <ion-icon name="people-outline"></ion-icon>
+        </ion-button>
+    </ion-item>
+    <ion-item (click)="clickInItem($event,item)" class="mb-m" *ngFor="let item of items">
+        <ion-avatar slot="start">
+            <img src="https://lh3.googleusercontent.com/a-/AOh14GiN6tgdNmEYXGyyr_QFJQ2phLwgBfk_r7J6W6uTtA">
+        </ion-avatar>
+        <ion-label>
+            <h2>{{item.name}} </h2>
+        </ion-label>
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+
+        <!-- <ion-label slot="end">
+        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+      </ion-label> -->
+
+    </ion-item>
+</ion-list>
+
+
+
+
+<!-- <ion-list show-reorder="false">
+  <ion-reorder-group [disabled]="false" (ionItemReorder)="reorder($event)">
+    <ion-reorder *ngFor="let item of items">
+      <ion-item class="mb-m">
+        <ion-avatar slot="start">
+          <img src="https://lh3.googleusercontent.com/a-/AOh14GiN6tgdNmEYXGyyr_QFJQ2phLwgBfk_r7J6W6uTtA">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{item.name}} </h2>
+        </ion-label>
+      </ion-item>
+    </ion-reorder>
+
+  </ion-reorder-group>
+</ion-list> -->
