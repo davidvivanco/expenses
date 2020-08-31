@@ -1,0 +1,46 @@
+<form [formGroup]="groupDataForm">
+    <ion-grid fixed>
+        <app-avatar [avatarSelected]="avatarSelected" (onAvatarSelected)="avatarChange($event)"></app-avatar>
+        <ion-row>
+            <ion-col>
+                <ion-list class="mt-m">
+                    <ion-item>
+                        <ion-input formControlName="name" placeholder="Nombre del grupo" type="text">
+                        </ion-input>
+                        <small class="no-valid" *ngIf="nameIsNoValid && groupDataForm.touched">Campo requerido</small>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+        <ion-row class="mt-m">
+            <ion-col size="12">
+                <ion-item lines="none">
+                    <ion-label>Modo</ion-label>
+                    <ion-select formControlName="mode" interface="popover">
+                        <ion-select-option value="owner">Propietario</ion-select-option>
+                        <ion-select-option value="shared">Compartido</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12">
+                <ion-item lines="none">
+                    <ion-label>Moneda</ion-label>
+                    <ion-select formControlName="currency" interface="popover">
+                        <ion-select-option value="eu">Euros</ion-select-option>
+                        <ion-select-option value="dol">Dólares</ion-select-option>
+                        <ion-select-option value="li">Libras</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <section class="ion-padding mt-m">
+                    <ion-button [disabled]="groupDataForm.invalid || groupDataForm.untouched" (click)="submit()" shape="round" expand="block ">Crear grupo</ion-button>
+                </section>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</form>

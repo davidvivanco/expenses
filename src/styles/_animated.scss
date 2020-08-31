@@ -1,25 +1,33 @@
 /* Modal animation */
+
 .slide-in-right {
-  -webkit-transform: translateX(100%);
-    transform: translateX(100%); 
-  }
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+}
 
-.slide-in-right.ng-enter, .slide-in-right > .ng-enter {
-  -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
-  transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms; }
+.slide-in-right.ng-enter,
+.slide-in-right>.ng-enter {
+    -webkit-transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+    transition: all cubic-bezier(0.1, 0.7, 0.1, 1) 400ms;
+}
 
-.slide-in-right.ng-enter-active, .slide-in-right > .ng-enter-active {
-  -webkit-transform: translateX(0);
-    transform: translateX(0); }
+.slide-in-right.ng-enter-active,
+.slide-in-right>.ng-enter-active {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}
 
-.slide-in-right.ng-leave, .slide-in-right > .ng-leave {
-  -webkit-transition: all ease-in-out 250ms;
-  transition: all ease-in-out 250ms; }
+.slide-in-right.ng-leave,
+.slide-in-right>.ng-leave {
+    -webkit-transition: all ease-in-out 250ms;
+    transition: all ease-in-out 250ms;
+}
+
+
 /* Modal animation end */
 
-  // Animations
-
-  .animated {
+// Animations
+.animated {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
@@ -31,39 +39,40 @@
     animation-duration: 700ms;
 }
 
-  @-webkit-keyframes fadeIn {
+@-webkit-keyframes fadeIn {
     from {
-      opacity: 0;
+        opacity: 0;
     }
-  
     to {
-      opacity: 1;
+        opacity: 1;
     }
-  }
-  
-  @keyframes fadeIn {
+}
+
+@keyframes fadeIn {
     from {
-      opacity: 0;
+        opacity: 0;
     }
-  
     to {
-      opacity: 1;
+        opacity: 1;
     }
-  }
-  
-  .fadeIn {
+}
+
+.fadeIn {
     -webkit-animation-name: fadeIn;
     animation-name: fadeIn;
-  }
+}
 
-
-  ion-tab-button {
+ion-tab-button {
     --ripple-color: var(--ion-color-medium);
     --color: var(--ion-color-dark);
     --color-selected: var(--ion-color-medium);
-  }
-  
-  ion-tab-button.tab-selected {
+}
+
+ion-tab-button.tab-selected {
     --background: var(--ion-color-main) !important;
     --color-selected: var(--ion-color-light);
-  }
+}
+
+.activated {
+    --ion-item-background: var(--ion-color-light-shade);
+}

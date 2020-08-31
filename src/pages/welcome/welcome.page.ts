@@ -56,26 +56,28 @@ export class WelcomePage implements OnInit {
     }
     this.showProgressBar = true;
 
-    const userInDatabase:any = await this.firebaseService.getUser('users', user.id);
-    console.log('DDBB',userInDatabase);
-    if (!userInDatabase){
-       await this.firebaseService.insertOne('users', user);
-       await this.setSessionStorage(this.token, user);
-    }else await this.setSessionStorage(this.token, userInDatabase);
+    const userInDatabase: any = await this.firebaseService.getUser('users', user.id, ['googleId', '==', user.googleId]);
+    console.log(userInDatabase);
+
+    if (!userInDatabase) {
+      await this.firebaseService.insertOne('users', user, true);
+      await this.setSessionStorage(this.token, user);
+    } else await this.setSessionStorage(this.token, userInDatabase);
     this.showProgressBar = false;
     this.router.navigate(['tabs']);
   }
 
-  
-  
+
+
 
   userBuilder(employeeData: GoogleResponse): User {
     return {
-      id: employeeData.userId,
+      googleId: employeeData.userId,
       name: employeeData.givenName,
       lastname: employeeData.familyName,
       email: employeeData.email,
-      imageUrl: employeeData.imageUrl
+      imageUrl: employeeData.imageUrl,
+      groups:[]
     }
   }
 

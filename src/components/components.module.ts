@@ -8,6 +8,7 @@ import { ReorderListComponent } from './reorder-list/reorder-list.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
 import { ModalHeaderComponent } from './modal-header/modal-header.component';
 import { ListComponent } from './list/list.component';
+import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
 
 
 
@@ -19,7 +20,8 @@ import { ListComponent } from './list/list.component';
     ReorderListComponent,
     MainHeaderComponent,
     ModalHeaderComponent,
-    ListComponent
+    ListComponent,
+    ChooseAvatarComponent
   ],
   exports: [
     HeaderComponent,
@@ -27,7 +29,8 @@ import { ListComponent } from './list/list.component';
     ReorderListComponent,
     MainHeaderComponent,
     ModalHeaderComponent,
-    ListComponent
+    ListComponent,
+    ChooseAvatarComponent
   ],
   imports: [
     CommonModule,

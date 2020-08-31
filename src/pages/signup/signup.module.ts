@@ -24,7 +24,6 @@ export function createTranslateLoader(http: HttpClient) {
     ComponentsModule,
     FormsModule,
     IonicModule,
-    FormsModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,

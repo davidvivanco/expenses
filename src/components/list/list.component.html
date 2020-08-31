@@ -1,34 +1,65 @@
-<ion-list show-reorder="false">
-    <ion-item *ngIf="user" class="mb-s mt-l">
-        <!-- <ion-avatar slot="start">
-          <img *ngIf="user" [src]="user.imageUrl">
-        </ion-avatar> -->
-        <ion-label>
-            <h2>Crea nuevo grupo</h2>
-        </ion-label>
-        <ion-button class="mb-m" size="medium" color="primary" (click)="share(user)">
-            <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
-            <ion-icon name="people-outline"></ion-icon>
-        </ion-button>
-    </ion-item>
-    <ion-item (click)="clickInItem($event,item)" class="mb-m" *ngFor="let item of items">
-        <ion-avatar slot="start">
-            <img src="https://lh3.googleusercontent.com/a-/AOh14GiN6tgdNmEYXGyyr_QFJQ2phLwgBfk_r7J6W6uTtA">
+<ion-list show-reorder="false" *ngIf="items">
+
+
+    <!-- <ion-item lines="none" *ngIf="itemLabel" class="mt-m">
+        <ion-avatar class="mb-l" *ngIf="component === 'users'" slot="start">
+            <img *ngIf="group" src="{{'../assets/img/groups-avatar/'+group.img}}">
         </ion-avatar>
-        <ion-label>
-            <h2>{{item.name}} </h2>
+        <ion-label *ngIf="component !== 'groups'" class="mb-l">
+            <h2>{{itemLabel}}</h2>
         </ion-label>
-        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+        <ion-button slot="end" class="mb-l" size="medium" color="primary" (click)="clickInButton()">
+            <ion-icon *ngFor="let icon of itemIcon" [size]="icon.size" slot="icon-only" [name]="icon.name"></ion-icon>
+        </ion-button>
+    </ion-item> -->
 
-        <!-- <ion-label slot="end">
-        <ion-icon name="ellipsis-vertical-outline"></ion-icon>
-      </ion-label> -->
 
-    </ion-item>
+    <!-- <ion-item *ngIf="component === 'groups'" lines="none" class="mt-m">
+        <ion-label *ngIf="component === 'groups'" color="primary" class="mb-l ml-m toUpperCase">
+            <h2>{{title}}</h2>
+        </ion-label>
+        <ion-button slot="end" class="mb-l" size="medium" color="primary" (click)="clickInButton()">
+            <ion-icon *ngFor="let icon of itemIcon" [size]="icon.size" slot="icon-only" [name]="icon.name"></ion-icon>
+        </ion-button>
+    </ion-item> -->
+
+    <ion-item-sliding #slidingItem *ngFor="let item of items;let i = index">
+
+        <ion-item *ngIf="component === 'groups'" (click)="clickInItem(item,slidingItem)">
+            <ion-avatar slot="start">
+                <img *ngIf="item.img" src="{{'../assets/img/groups-avatar/'+item.img}}">
+            </ion-avatar>
+            <ion-label>
+                <h2>{{item.name}} </h2>
+            </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="component === 'users'" (click)="clickInItem($event,item)">
+            <ion-avatar slot="start">
+                <img *ngIf="item.img" src="{{'../assets/img/users-avatar/'+item.img}}">
+                <img *ngIf="item.imageUrl" src="{{item.imageUrl}}">
+            </ion-avatar>
+            <ion-label>
+                <h2>{{item.name}} </h2>
+            </ion-label>
+        </ion-item>
+
+
+        <ion-item-options side="end">
+            <ion-item-option color="success" (click)="activity(item,slidingItem)">
+                <ion-icon slot="start" name="pulse-outline"></ion-icon>
+            </ion-item-option>
+            <ion-item-option (click)="edit(item,slidingItem)">
+                <ion-icon slot="start" name="create"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="delete(i,item)">
+                <ion-icon slot="start" name="trash"></ion-icon>
+            </ion-item-option>
+        </ion-item-options>
+
+
+    </ion-item-sliding>
 </ion-list>
-
-
-
 
 <!-- <ion-list show-reorder="false">
   <ion-reorder-group [disabled]="false" (ionItemReorder)="reorder($event)">

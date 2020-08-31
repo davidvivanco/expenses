@@ -1,8 +1,27 @@
-<ion-content class="animated fadeIn fast">
-    <app-main-header [title]=title></app-main-header>
-    <!-- <app-reorder-list [type]="type" [items]=groups (onDetails)="goToUsers($event)" (onDelete)="deleteGroup()" (onEdit)="editGroup($event)"
-    (onActivity)="goToActivity($event)" (onCardClick)="goToUsers($event)" (onItemsOrderChanged)="reorderGroups()">
-  </app-reorder-list> -->
+<ion-content fullscreen class="animated fadeIn fast">
+    <ion-slides (ionSlideTouchEnd)="onSlidesMove()" #mainSlide [options]="slideOptions">
+        <ion-slide>
+            <ion-content class="ion-padding">
+                <app-add-group [group]="group" (onSubmit)="submit($event)" (onAvatarSelected)="avatarChange($event)"></app-add-group>
+            </ion-content>
+        </ion-slide>
+        <ion-slide>
+            <ion-content fullscreen class="animated fadeIn fast">
+                <app-main-header [title]=title></app-main-header>
+                <app-list [itemIcon]="itemIcon" itemLabel="true" [component]="component" [user]="user" [items]="groups" (onActivity)="goToActivity($event)" (onEdit)="editGroup($event)" (onClick)="goToUsers($event)"></app-list>
+                <ion-fab class="mb-m mr-m" (click)=addGroup() horizontal="end" vertical="bottom" slot="fixed">
+                    <ion-fab-button>
+                        <ion-icon name="add"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab>
+            </ion-content>
+        </ion-slide>
+        <ion-slide>
+            <ion-content fullscreen class="animated fadeIn fast">
+                <h1>Activity</h1>
+            </ion-content>
+        </ion-slide>
+    </ion-slides>
 
-    <app-list [user]="user" [items]="groups" (onClick)="goToUsers($event)" (onClickMenu)="openMenuModal($event)"></app-list>
+
 </ion-content>

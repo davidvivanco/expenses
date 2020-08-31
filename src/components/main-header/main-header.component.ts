@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/models/interfaces/user.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-header',
@@ -9,11 +10,16 @@ import { User } from 'src/models/interfaces/user.interface';
 })
 export class MainHeaderComponent implements OnInit {
   user: User;
-  @Input() title:string 
+  @Input() title: string
+  @Input() component: string
+  @Input() backPath: string
+
+  @Output() onGoBack: EventEmitter<boolean>
 
   constructor(
     private userService: UserService
   ) {
+    this.onGoBack = new EventEmitter();
     this.userService.getUser().then(user => {
       this.user = user;
     });
@@ -23,4 +29,8 @@ export class MainHeaderComponent implements OnInit {
 
   ngOnInit() { }
 
+
+  goBack() {
+    this.onGoBack.emit(true);
+  }
 }

@@ -1,0 +1,32 @@
+<ion-content fullscreen class="animated fadeIn fast">
+    <ion-slides (ionSlideTouchEnd)="onSlidesMove()" #mainSlide [options]="slideOptions">
+        <ion-slide>
+            <h1>Page 0</h1>
+        </ion-slide>
+        <ion-slide>
+            <ion-content fullscreen class="animated fadeIn fast">
+                <app-main-header [component]="'users'" (onGoBack)=goBack() [title]="title"></app-main-header>
+                <ion-item *ngIf="group" lines="none">
+                    <ion-avatar slot="start">
+                        <img src="{{ '../assets/img/groups-avatar/'+group.img}} ">
+                    </ion-avatar>
+                    <ion-label>
+                        <h2 class="toUpperCase "><strong color="primary ">{{group.name}}</strong></h2>
+                    </ion-label>
+                </ion-item>
+                <app-list *ngIf="users " [itemIcon]="itemIcon " [itemLabel]="itemLabel " [component]=" 'users' " [items]="users " (onActivity)="goToActivity($event) " (onDelete)="deleteUser($event) " (onEdit)="editUser($event) " (onClick)="goToExpenses($event) ">
+                </app-list>
+                <ion-fab class="mb-m mr-m " (click)=addUser() horizontal="end " vertical="bottom " slot="fixed ">
+                    <ion-fab-button>
+                        <ion-icon name="add "></ion-icon>
+                    </ion-fab-button>
+                </ion-fab>
+            </ion-content>
+        </ion-slide>
+        <ion-slide>
+            <h1>Activity</h1>
+        </ion-slide>
+    </ion-slides>
+
+
+</ion-content>

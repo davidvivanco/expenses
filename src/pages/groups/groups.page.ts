@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
-import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from 'src/services/firebase.service';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/models/interfaces/user.interface';
-import { ModalController, IonItemSliding } from '@ionic/angular';
-import { AddGroupModalComponent } from './modals/add-group-modal/add-group-modal.component';
-import { UsersModalComponent } from './modals/users-modal/users-modal.component';
-import { ActivityModalComponent } from './modals/activity-modal/activity-modal.component';
-import { MenuModalComponent } from './modals/menu-modal/menu-modal.component';
+import { ModalController, AlertController, IonSlides } from '@ionic/angular';
+import { Group } from 'src/models/interfaces/group.interface';
+import { SlideOptions } from 'src/models/interfaces/slide-options.interface';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,55 +15,115 @@ import { MenuModalComponent } from './modals/menu-modal/menu-modal.component';
 })
 export class GroupsPage {
 
-  private groups: Array<object>;
-  private type: string;
+  @ViewChild('mainSlide') slide: IonSlides;
+
+  private component: string;
   private title: string;
+  private itemIcon: Array<object>;
+  private groups: Array<object>;
+  private group: Group;
   private user: User;
+  private slideOptions: SlideOptions;
 
   constructor(
-    private db: AngularFirestoreModule,
     private firebaseService: FirebaseService,
     private userService: UserService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public alertController: AlertController,
+    private router: Router
+
   ) {
-    this.type = 'groups'
+    this.slideOptions = {
+      initialSlide: 1
+    }
+    this.group = null;
+    this.component = 'groups'
     this.title = 'Mis grupos'
+    this.itemIcon = [{ size: 'small', name: 'add' }, { name: 'people-outline' }]
     this.getGroups().then();
+
+  }
+
+  lockSlides(): void {
+    this.slide.lockSwipes(true);
+  }
+
+  unLockSlides(): void {
+    this.slide.lockSwipes(false);
+  }
+
+  reorderGroupsWithUserPreferences(groups: Array<Group>) {
+    this.groups = [];
+    groups.forEach((group: any) => {
+      const index = this.user.groups.findIndex(g => g === group.id);
+      this.groups[index] = group;
+      this.slide.lockSwipes(true);
+    });
+  }
+
+  setSlidePage = (index: number) => {
+    this.slide.lockSwipes(false);
+    this.slide.slideTo(index);
+  }
+
+  onSlidesMove() {
+    this.slide.getActiveIndex().then(index => {
+      (this.isMainPage(index))
+        ? this.lockSlides()
+        : this.unLockSlides()
+    });
+  }
+
+
+
+  slideTo = (index: number) => this.setSlidePage(index);
+
+  userBelongsToAGroup = (): boolean => this.user.groups.length > 0;
+
+  isMainPage = (index: number): boolean => index === 1;
+
+  addGroup() {
+    this.group = null
+    this.slideTo(0);
+  }
+
+  deleteGroup = (e) => {
+    console.log('delete', e);
+  }
+
+  editGroup(e) {
+    console.log('edit', e);
+    e.slidingItem.close()
+    this.group = e.item;
+    this.slideTo(0);
   }
 
   async getGroups() {
     this.user = await this.userService.getUser();
-    this.firebaseService.findBy('groups', ['_id', 'in', this.user.groups]).subscribe((groups: any) => {
-      this.groups = [];
-      groups.forEach((group: any) => {
-        const index = this.user.groups.findIndex(g => g === group._id);
-        this.groups[index] = group;
+    if (this.userBelongsToAGroup()) {
+      this.firebaseService.findByOneQuery('groups', ['id', 'in', this.user.groups]).subscribe((groups: any) => {
+        this.lockSlides();
+        this.reorderGroupsWithUserPreferences(groups)
       });
-    });
+    }
   }
 
-  async openModalController(options) {
-    const modal = await this.modalController.create(options);
-    return await modal.present();
+  async submit(group: Group) {
+    const newGroup: Group = await this.createGroup(group);
+    await this.updateUserGroups(newGroup);
+    this.goToMainPage();
   }
 
-
-  async openAddGroupModal() {
-    await this.openModalController({
-      component: AddGroupModalComponent,
-      cssClass: "animated",
-      swipeToClose: true
-    });
+  async createGroup(group: Group): Promise<Group> {
+    const newGroup: Group = await this.firebaseService.insertOne('groups', group);
+    this.groups.push(group);
+    return newGroup;
   }
 
-
-  async openUsersModal(group) {
-    await this.openModalController({
-      component: UsersModalComponent,
-      cssClass: "animated",
-      swipeToClose: true,
-      componentProps: { group }
-    });
+  async updateUserGroups(newGroup) {
+    this.user.groups.push(newGroup.id)
+    await this.userService.setUser(this.user);
+    await this.firebaseService.updateById('users', this.user.id, this.user)
   }
 
   async reorderGroups() {
@@ -75,43 +133,22 @@ export class GroupsPage {
     this.userService.setUser(this.user);
   }
 
-  async goToUsers(e: EventResponse) {
-    // if (e.slidingItem) e.slidingItem.close();
-    await this.openUsersModal(e)
+  goToActivity(e) {
+    console.log(e);
+    e.slidingItem.close()
+    this.slideTo(2);
   }
 
-  async openMenuModal(e) {
-    await this.openModalController({
-      component: MenuModalComponent,
-      cssClass: "animated",
-      swipeToClose: true,
-      componentProps: { group:e }
-    });
+  goToUsers = async (group: Group) => {
+    console.log(group);
+    this.router.navigate([`/users/${group.id}`], { state: { group } });
   }
 
-  deleteGroup(e: EventResponse) {
-    console.log('delete', e);
-  }
-
-  editGroup(e: EventResponse) {
-    if (e.slidingItem) e.slidingItem.close();
-    console.log('edit', e);
-  }
-
-  async goToActivity(e: EventResponse) {
-    e.slidingItem.close();
-    console.log('activity', e);
-    await this.openModalController({
-      component: ActivityModalComponent,
-      cssClass: "animated",
-      swipeToClose: true,
-      componentProps: { group: e.item, user: this.user }
-    });
+  goToMainPage = async () => {
+    this.slideTo(1);
   }
 
 }
 
-interface EventResponse {
-  item: any,
-  slidingItem: IonItemSliding
-}
+
+

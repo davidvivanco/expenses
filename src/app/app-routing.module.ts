@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('../pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'users/:groupId',
+    loadChildren: () => import('../pages/users/users.module').then( m => m.UsersPageModule)
   }
 
 ];
