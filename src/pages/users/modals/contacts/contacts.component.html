@@ -1,0 +1,13 @@
+<ion-list>
+    <ion-item lines="none">
+        <ion-icon (click)="goBack()" size="large" slot="end" class="ml-l" color="primary" name="close">
+        </ion-icon>
+    </ion-item>
+    <ion-list-header class="toUpperCase text-center">
+        <ion-label color="primary"> Añade nuevo usuario</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let contact of contacts">
+        <ion-label>{{contact.displayName}}</ion-label>
+        <ion-icon (click)="selectContact(contact)" color="primary" name="add-circle"></ion-icon>
+    </ion-item>
+</ion-list>

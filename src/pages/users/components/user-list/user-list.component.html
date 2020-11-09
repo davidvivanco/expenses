@@ -1,0 +1,58 @@
+<div *ngIf="users && group">
+
+    <ion-item lines="none" class="mt-m">
+        <ion-avatar slot="start">
+            <img src="{{ '../assets/img/groups-avatar/'+group.img}} ">
+        </ion-avatar>
+        <ion-label>
+            <h4 color="primary">{{group.name}}</h4>
+        </ion-label>
+        <div style="display: flex;justify-content: center;">
+            <ion-button slot="end" size="small" color="success" (click)="activityGroup(group)">
+                <ion-icon name="pulse-outline"></ion-icon>
+            </ion-button>
+            <ion-button slot="end" size="small" color="primary" (click)="editGroup(group)">
+                <ion-icon name="create"></ion-icon>
+            </ion-button>
+            <ion-button slot="end" size="small" color="danger" (click)="deleteGroup(group)">
+                <ion-icon name="trash"></ion-icon>
+            </ion-button>
+        </div>
+    </ion-item>
+
+    <ion-title class="toUpperCase mt-m" color="primary" size="small">Usuarios de {{group.name}}</ion-title>
+
+    <ion-list show-reorder="false" *ngIf="users">
+        <ion-item-sliding #slidingItem *ngFor="let user of users;let i = index">
+
+            <ion-item lines="none" (click)="clickInItem(user,slidingItem)">
+                <ion-avatar slot="start">
+                    <img *ngIf="user.img" src="{{'../assets/img/users-avatar/'+user.img}}">
+                    <img *ngIf="user.imageUrl" src="{{user.imageUrl}}">
+                </ion-avatar>
+                <ion-label>
+                    <h2>{{user.name}} </h2>
+                </ion-label>
+                <ion-badge mode="ios" color="primary">{{user.totalExpenses}} €</ion-badge>
+            </ion-item>
+
+
+            <ion-item-options side="end">
+                <ion-item-option color="warning" (click)="addExpense(user,slidingItem)">
+                    <ion-icon slot="start" name="card-outline"></ion-icon>
+                </ion-item-option>
+                <!-- <ion-item-option color="success" (click)="activity(user)">
+                    <ion-icon slot="start" name="pulse-outline"></ion-icon>
+                </ion-item-option> -->
+                <ion-item-option (click)="editUser(user,slidingItem)">
+                    <ion-icon slot="start" name="create"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="deleteUser(i,user)">
+                    <ion-icon slot="start" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+
+
+        </ion-item-sliding>
+    </ion-list>
+</div>

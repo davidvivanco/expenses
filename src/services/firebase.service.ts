@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { User } from 'src/models/interfaces/user.interface';
 
 
 @Injectable({
@@ -27,7 +28,7 @@ export class FirebaseService {
       })
     })
   }
-  
+
 
   getUser(collection: string, userId: string, query: Array<any>) {
     return new Promise((resolve, reject) => {
@@ -59,7 +60,6 @@ export class FirebaseService {
   }
 
   updateById(collection: string, id: string, data: object) {
-    console.log(id);
     return new Promise((resolve, reject) => {
       this.db.collection(collection)
         .doc(id)
@@ -67,6 +67,48 @@ export class FirebaseService {
         .then(res => {
           resolve(res);
         })
+    })
+  }
+
+  deleteDocument(collection: string, id: string) {
+    return new Promise((resolve, reject) => {
+      this.db.collection(collection)
+        .doc(id)
+        .delete()
+        .then(res => {
+          resolve(res);
+        })
+    })
+  }
+
+  getUsers(groupId: string) {
+    return new Promise<Array<User>>((resolve, reject) => {
+      this.db.collection('users',
+        ref => ref
+          .where('fakeUser', '==', true)
+          .where('groups', 'array-contains', groupId))
+        .valueChanges()
+        .subscribe((users: Array<User>) => {
+          resolve(users);
+        });
+
+    })
+  }
+
+  getTotalExpenses(id: string,fieldToQuery:string) {
+    return new Promise<number>((resolve, reject) => {
+      this.db.collection('expenses',
+        ref => ref
+          .where(fieldToQuery, '==', id))
+        .valueChanges()
+        .subscribe((expenses: Array<any>) => {
+          let total = 0
+          expenses.forEach(e => {
+            total += e.expense;
+          })
+          resolve(total);
+        });
+
     })
   }
 

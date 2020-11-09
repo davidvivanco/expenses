@@ -1,10 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { SlideOptions } from 'src/models/interfaces/slide-options.interface';
-import { IonSlides } from '@ionic/angular';
+import { IonSlides, Platform } from '@ionic/angular';
 import { FirebaseService } from 'src/services/firebase.service';
 import { User } from 'src/models/interfaces/user.interface';
 import { Group } from 'src/models/interfaces/group.interface';
+import { ModalController } from '@ionic/angular';
+import { ContactsComponent } from './modals/contacts/contacts.component';
+import { Contacts, Contact } from '@ionic-native/contacts/ngx';
+import { CommonService } from 'src/services/common.service';
+import { UserService } from 'src/services/user.service';
 
 @Component({
   selector: 'app-users',
@@ -16,8 +21,11 @@ export class UsersPage implements OnInit {
   slideOptions: SlideOptions
   groupId: string;
   title: string;
-  group:Group;
+  group: Group;
   users: Array<User>;
+  user: User;
+  userLogged: User;
+  activity: any;
 
   @ViewChild('mainSlide') slide: IonSlides;
 
@@ -25,30 +33,50 @@ export class UsersPage implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    public modalController: ModalController,
+    private platform: Platform,
+    private contacts: Contacts,
+    private userService: UserService,
+    private commonService: CommonService
   ) {
     this.slideOptions = {
       initialSlide: 1
     }
+
+    this.userService.getUser().then((user: User) => {
+      this.userLogged = user;
+    })
   }
 
   ngOnInit() {
-    this.group = this.router.getCurrentNavigation().extras.state.group;
     this.title = `Usuarios`
     this.route.params.subscribe((params: Params) => {
-      console.log('parmas', params);
       this.groupId = params.groupId;
-      this.getUsers().then();
+      this.getGroup()
+      this.getUsers()
     });
   }
 
-
-  async getUsers() {
-    this.firebaseService.findByOneQuery('users', ['groups', 'array-contains', this.groupId]).subscribe(users => {
-      this.users = users;
-      this.lockSlides();
-
+  getGroup() {
+    this.firebaseService.findByOneQuery('groups', ['id', '==', this.groupId]).subscribe(groups => {
+      this.group = groups[0];
     });
+  }
+
+  getUsers() {
+    this.firebaseService.findByTwoQueries('users', ['fakeUser', '==', true], ['groups', 'array-contains', this.groupId]).subscribe(users => {
+      this.getTotalExpensesPerUser(users).then(res => {
+        this.users = users;
+        this.lockSlides();
+      })
+    });
+  }
+
+  async getTotalExpensesPerUser(users: Array<User>) {
+    for (const user of users) {
+      user.totalExpenses = await this.firebaseService.getTotalExpenses(user.id, 'userId')
+    }
   }
 
   goBack() {
@@ -65,7 +93,6 @@ export class UsersPage implements OnInit {
 
   isMainPage = (index: number): boolean => index === 1;
 
-
   lockSlides(): void {
     this.slide.lockSwipes(true);
   }
@@ -74,31 +101,124 @@ export class UsersPage implements OnInit {
     this.slide.lockSwipes(false);
   }
 
-  goToActivity(e){
-    console.log(e);
+  goToActivity(user: User) {
+    console.log(user);
+    this.getActivity(user);
   }
 
-  editUser(e){
-    console.log(e);
+  getActivity(user: User) {
+    this.firebaseService.findByTwoQueries('activity',
+      ['userId', '==', user.id],
+      ['groupId', '==', this.groupId]
+    ).subscribe((activity: any) => {
+      console.log(activity);
+      this.activity = activity;
+      this.slideTo(2);
+    })
   }
 
-  deleteUser(e){
-    console.log(e);
+  editGroup(e: any) {
+    if (e.slidingItem) e.slidingItem.close()
+    if (e.group.mode) {
+      this.router.navigate([`/tabs/groups`], { queryParams: { groupId: e.group.id } })
+    }
   }
 
-  goToExpenses(e){
-    console.log(e);
+  goEditUserView(user: User) {
+    this.user = user;
+    this.slideTo(0)
   }
 
-  addUser() {
-    this.slideTo(0);
+  goToMainPage = async () => {
+    this.slideTo(1);
+  }
+
+  async editUser(user: User) {
+    await this.firebaseService.updateById('users', user.id, user)
+    this.goToMainPage();
+    await this.firebaseService.insertOne('activity', {
+      type: 'editUser',
+      userId: this.userLogged.id,
+      img: this.userLogged.imageUrl || this.userLogged.img,
+      groupId: this.groupId,
+      date: this.commonService.getDate(),
+      message: `${this.userLogged.name} ha editado al usuario ${user.name}`
+    })
+  }
+
+  goToExpenses(e) {
+  }
+
+  async addUser(user?: User) {
+    if (user) {
+      this.firebaseService.insertOne(
+        'users',
+        {
+          ...user,
+          groups: [this.groupId],
+          fakeUser: true
+        }
+      )
+      this.slideTo(1);
+      await this.firebaseService.insertOne('activity', {
+        type: 'addUser',
+        userId: this.userLogged.id,
+        img: this.userLogged.imageUrl || this.userLogged.img,
+        groupId: this.groupId,
+        date: this.commonService.getDate(),
+        message: `${this.userLogged.name} ha añadido al usuario ${user.name}`
+      })
+    }
+    else {
+      if (this.platform.is('cordova')) {
+        this.contacts.find(['*'], {
+          filter: '',
+          multiple: true,
+          hasPhoneNumber: true
+        }).then(async (contacts: Contact[]) => {
+          await this.contactsModal(contacts);
+
+        });
+      } else {
+        await this.contactsModal();
+      }
+    }
   }
 
   slideTo = (index: number) => this.setSlidePage(index);
 
   setSlidePage = (index: number) => {
+    if (index === 1) this.user = null;
     this.slide.lockSwipes(false);
     this.slide.slideTo(index);
   }
 
+  async addExpense(user: User) {
+    await this.addExpenseModal(user)
+  }
+
+  async addExpenseModal(user: User) {
+    //await this.commonService.addExpenseAlert(user, this.userLogged, this.groupId);
+
+  }
+
+  async contactsModal(contacts?) {
+    const modal = await this.modalController.create({
+      component: ContactsComponent,
+      componentProps: {
+        data: contacts
+      }
+    });
+    modal.onDidDismiss().then((res: any) => {
+      if (res?.data?.contact) {
+        this.user = {
+          name: res.data.contact.displayName
+        }
+        this.slideTo(0);
+      }
+    })
+
+    return await modal.present();
+
+  }
 }

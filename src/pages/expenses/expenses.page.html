@@ -1,0 +1,60 @@
+<ion-content fullscreen class="animated fadeIn fast">
+
+    <app-main-header [showGoBackButton]="true" (onGoBack)=goBack() [title]="title"></app-main-header>
+
+    <div *ngIf="user">
+        <ion-item lines="none" class="mt-m">
+            <ion-avatar slot="start">
+                <img src="{{'../assets/img/users-avatar/'+user.img}}">
+            </ion-avatar>
+            <ion-label>
+                <h4 color="primary">{{user.name}}</h4>
+            </ion-label>
+            <div style="display: flex;justify-content: center;">
+                <!-- <ion-button slot="end" size="small" color="success" (click)="activity(group)">
+                    <ion-icon name="pulse-outline"></ion-icon>
+                </ion-button> -->
+                <ion-button slot="end" size="small" color="primary" (click)="editGroup(group)">
+                    <ion-icon name="create"></ion-icon>
+                </ion-button>
+                <ion-button slot="end" size="small" color="danger" (click)="deleteUser(user)">
+                    <ion-icon name="trash"></ion-icon>
+                </ion-button>
+            </div>
+        </ion-item>
+        <div style="text-align: center;">
+            <ion-title class="toUpperCase mt-m" color="primary" size="small">Gastos de {{user.name}}</ion-title>
+        </div>
+        <ion-list show-reorder="false">
+            <ion-item-sliding #slidingItem *ngFor="let expense of expenses;let i = index">
+
+                <ion-item lines="none" (click)="clickInItem(user,slidingItem)">
+                    <ion-label slot="start">
+                        {{expense.concept}}
+                    </ion-label>
+                    <ion-label slot="end" class="ml-xl">
+                        {{expense.expense}} €
+                    </ion-label>
+                </ion-item>
+
+
+                <ion-item-options side="end">
+                    <ion-item-option (click)="editExpense(expense,slidingItem)">
+                        <ion-icon slot="start" name="create"></ion-icon>
+                    </ion-item-option>
+                    <ion-item-option color="danger" (click)="deleteExpense(expense,slidingItem)">
+                        <ion-icon slot="start" name="trash"></ion-icon>
+                    </ion-item-option>
+                </ion-item-options>
+
+
+            </ion-item-sliding>
+        </ion-list>
+    </div>
+    <ion-fab class="mb-m mr-m" (click)=addExpense() horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="card"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+
+</ion-content>

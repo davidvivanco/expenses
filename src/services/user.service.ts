@@ -26,11 +26,10 @@ export class UserService {
         resolve(token)
       });
     })
-    // this.storage.set('token', token);
   }
 
   getUser(): Promise<User> {
-    return new Promise((resolve, reject) => {
+    return new Promise<User>((resolve, reject) => {
       this.storage.get('user').then((user) => {
         resolve(user)
       });

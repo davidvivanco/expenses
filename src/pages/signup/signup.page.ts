@@ -70,7 +70,6 @@ export class SignupPage implements OnInit {
   }
 
   signUp(): void {
-    console.log(this.signupForm);
   }
 
 }

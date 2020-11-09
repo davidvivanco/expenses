@@ -1,0 +1,21 @@
+<ion-row *ngIf="avatars" class="top-20">
+    <ion-col size="12" text-center>
+        <img src="/assets/img/{{folder}}/{{getAvatarChecked().img}}" class="img-avatar">
+    </ion-col>
+</ion-row>
+<ion-row>
+    <ion-col class="mb-m" style="text-align: center;">
+        <h4><strong> Selecciona Avatar</strong></h4>
+    </ion-col>
+</ion-row>
+<ion-row>
+    <ion-col>
+        <ion-slides [options]="avatarSlide" class="mainSlide">
+            <ion-slide *ngFor="let avatar of avatars">
+                <ion-avatar>
+                    <img (click)="checkAvatar(avatar)" [ngClass]="{'pick-avatar-checked': avatar.checked}" class="pick-avatar" src="/assets/img/{{folder}}/{{avatar.img}}">
+                </ion-avatar>
+            </ion-slide>
+        </ion-slides>
+    </ion-col>
+</ion-row>

@@ -1,26 +1,21 @@
 <ion-content fullscreen class="animated fadeIn fast">
-    <ion-slides (ionSlideTouchEnd)="onSlidesMove()" #mainSlide [options]="slideOptions">
+    <ion-slides *ngIf="slideOptions" (ionSlideTouchEnd)="onSlidesMove()" #mainSlide [options]="slideOptions">
         <ion-slide>
-            <h1>Page 0</h1>
+            <ion-content class="ion-padding">
+                <app-add-user [user]="user" (onEditUser)="editUser($event)" (onAddUser)="addUser($event)" (onAvatarSelected)="avatarChange($event)"></app-add-user>
+            </ion-content>
         </ion-slide>
+
         <ion-slide>
             <ion-content fullscreen class="animated fadeIn fast">
-                <app-main-header [component]="'users'" (onGoBack)=goBack() [title]="title"></app-main-header>
-                <ion-item *ngIf="group" lines="none">
-                    <ion-avatar slot="start">
-                        <img src="{{ '../assets/img/groups-avatar/'+group.img}} ">
-                    </ion-avatar>
-                    <ion-label>
-                        <h2 class="toUpperCase "><strong color="primary ">{{group.name}}</strong></h2>
-                    </ion-label>
-                </ion-item>
-                <app-list *ngIf="users " [itemIcon]="itemIcon " [itemLabel]="itemLabel " [component]=" 'users' " [items]="users " (onActivity)="goToActivity($event) " (onDelete)="deleteUser($event) " (onEdit)="editUser($event) " (onClick)="goToExpenses($event) ">
-                </app-list>
-                <ion-fab class="mb-m mr-m " (click)=addUser() horizontal="end " vertical="bottom " slot="fixed ">
+                <app-main-header [showGoBackButton]="true" (onGoBack)=goBack() [title]="title"></app-main-header>
+                <app-user-list *ngIf="users" [users]="users" [group]="group" (onActivity)="goToActivity($event)" (onEditUser)="goEditUserView($event)" (onAddExpense)="addExpense($event)" (onEditGroup)="editGroup($event)"></app-user-list>
+                <ion-fab class="mb-m mr-m" (click)=addUser() horizontal="end" vertical="bottom" slot="fixed">
                     <ion-fab-button>
-                        <ion-icon name="add "></ion-icon>
+                        <ion-icon name="person-add"></ion-icon>
                     </ion-fab-button>
                 </ion-fab>
+
             </ion-content>
         </ion-slide>
         <ion-slide>

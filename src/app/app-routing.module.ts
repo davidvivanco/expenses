@@ -25,7 +25,12 @@ const routes: Routes = [
   {
     path: 'users/:groupId',
     loadChildren: () => import('../pages/users/users.module').then( m => m.UsersPageModule)
+  },
+  {
+    path: 'expenses/:userId/:groupId',
+    loadChildren: () => import('../pages/expenses/expenses.module').then( m => m.ExpensesPageModule)
   }
+
 
 ];
 @NgModule({

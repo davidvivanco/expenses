@@ -48,7 +48,6 @@ export class WelcomePage implements OnInit {
     if (this.platform.is('cordova')) {
       let loginGoogle = await this.authService.loginWithGoogle();
       user = this.userBuilder(loginGoogle);
-      console.log(loginGoogle);
     } else {
       const googleLoginResponseMock = this.googleLogin.loginResponse;
       this.token = googleLoginResponseMock.accessToken;
@@ -57,7 +56,6 @@ export class WelcomePage implements OnInit {
     this.showProgressBar = true;
 
     const userInDatabase: any = await this.firebaseService.getUser('users', user.id, ['googleId', '==', user.googleId]);
-    console.log(userInDatabase);
 
     if (!userInDatabase) {
       await this.firebaseService.insertOne('users', user, true);

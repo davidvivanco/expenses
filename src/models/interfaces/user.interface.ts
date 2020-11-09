@@ -6,6 +6,7 @@ export interface User {
     googleId?: string
     name?: string
     lastname?: string
+    totalExpenses?:number
     email?: string,
     imageUrl?: string,
     img?: string,

@@ -6,9 +6,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ReorderListComponent } from './reorder-list/reorder-list.component';
 import { MainHeaderComponent } from './main-header/main-header.component';
-import { ModalHeaderComponent } from './modal-header/modal-header.component';
 import { ListComponent } from './list/list.component';
-import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
+import { AvatarComponent } from './avatar/avatar.component';
+import { ActivityComponent } from './activity/activity.component';
+
 
 
 
@@ -19,18 +20,18 @@ import { ChooseAvatarComponent } from './choose-avatar/choose-avatar.component';
     ProgressBarComponent,
     ReorderListComponent,
     MainHeaderComponent,
-    ModalHeaderComponent,
     ListComponent,
-    ChooseAvatarComponent
+    AvatarComponent,
+    ActivityComponent,
   ],
   exports: [
+    AvatarComponent,
     HeaderComponent,
     ProgressBarComponent,
     ReorderListComponent,
     MainHeaderComponent,
-    ModalHeaderComponent,
     ListComponent,
-    ChooseAvatarComponent
+    ActivityComponent
   ],
   imports: [
     CommonModule,

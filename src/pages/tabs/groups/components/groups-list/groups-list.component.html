@@ -1,0 +1,30 @@
+<ion-list show-reorder="false" *ngIf="groups">
+    <ion-title class="toUpperCase mb-m" color="primary" size="small">Mis grupos</ion-title>
+    <ion-item-sliding #slidingItem *ngFor="let group of groups;let i = index">
+        <ion-item lines="none" (click)="clickInItem(group,slidingItem)">
+            <ion-avatar slot="start">
+                <img *ngIf="group.img" src="{{'../assets/img/groups-avatar/'+group.img}}">
+            </ion-avatar>
+            <ion-label>
+                <h2>{{group.name}} </h2>
+            </ion-label>
+            <ion-badge mode="ios" color="primary">{{group.totalExpenses}} €</ion-badge>
+
+
+        </ion-item>
+
+        <ion-item-options side="end">
+            <ion-item-option color="success" (click)="activity(group,slidingItem)">
+                <ion-icon slot="start" name="pulse-outline"></ion-icon>
+            </ion-item-option>
+            <ion-item-option (click)="edit(group,slidingItem)">
+                <ion-icon slot="start" name="create"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="delete(i,group,slidingItem)">
+                <ion-icon slot="start" name="trash"></ion-icon>
+            </ion-item-option>
+        </ion-item-options>
+
+
+    </ion-item-sliding>
+</ion-list>

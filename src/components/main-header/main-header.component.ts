@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { User } from 'src/models/interfaces/user.interface';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-header',
@@ -10,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class MainHeaderComponent implements OnInit {
   user: User;
+  @Input() showGoBackButton: boolean
   @Input() title: string
   @Input() component: string
   @Input() backPath: string
