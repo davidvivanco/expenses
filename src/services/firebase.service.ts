@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { Activity } from 'src/models/interfaces/activity.interface';
 import { User } from 'src/models/interfaces/user.interface';
 
 
@@ -95,7 +96,33 @@ export class FirebaseService {
     })
   }
 
-  getTotalExpenses(id: string,fieldToQuery:string) {
+  getElementsByOneQuery<T>(collection: string, id: string, fieldToSearch: string, operator: any) {
+    return new Promise<Array<T>>((resolve, reject) => {
+      this.db.collection(collection,
+        ref => ref
+        .where(fieldToSearch, operator, id))
+        .valueChanges()
+        .subscribe((res: Array<T>) => {
+          resolve(res);
+        });
+
+    })
+  }
+
+  getExpenses(groupId: string, fieldToSearch: string, operator: any) {
+    return new Promise<Array<Activity>>((resolve, reject) => {
+      this.db.collection('expenses',
+        ref => ref
+          .where(fieldToSearch, operator, groupId))
+        .valueChanges()
+        .subscribe((activity: Array<Activity>) => {
+          resolve(activity);
+        });
+
+    })
+  }
+
+  getTotalExpenses(id: string, fieldToQuery: string) {
     return new Promise<number>((resolve, reject) => {
       this.db.collection('expenses',
         ref => ref

@@ -23,6 +23,7 @@ export class GroupsPage {
   private groups: Array<object>;
   private group: Group;
   private groupName: string;
+  private page: number;
   private user: User;
   private slideOptions: SlideOptions;
   private activity: any;
@@ -41,7 +42,8 @@ export class GroupsPage {
       initialSlide: 1
     }
     this.group = null;
-    this.title = 'Mis grupos'
+    this.title = 'Mis grupos';
+    this.page = 1;
     this.route.queryParams.subscribe(params => {
       this.getGroups(params).then();
     })
@@ -71,14 +73,17 @@ export class GroupsPage {
 
   onSlidesMove() {
     this.slide.getActiveIndex().then(index => {
+      this.page = index;
       (this.isMainPage(index))
         ? this.lockSlides()
         : this.unLockSlides()
     });
   }
 
-  slideTo = (index: number) => this.setSlidePage(index);
-
+  slideTo = (index: number) => {
+    this.page = index;
+    this.setSlidePage(index);
+  }
   userBelongsToAGroup = (): boolean => this.user.groups.length > 0;
 
   isMainPage = (index: number): boolean => index === 1;
@@ -96,8 +101,7 @@ export class GroupsPage {
 
   getActivity(group: Group) {
     this.groupName = group.name;
-    this.firebaseService.findByOneQuery('activity', ['groupId', '==', group.id]).subscribe((activity: any) => {
-      console.log(activity);
+    this.firebaseService.findByOneQuery('activity', ['group.id', '==', group.id]).subscribe((activity: any) => {
       this.activity = activity;
       this.slideTo(2);
     })
@@ -120,8 +124,6 @@ export class GroupsPage {
               ? this.getActivity(group)
               : this.goEditGroupView({ group });
           }
-          console.log('GROUPS', this.groups);
-
         });
       });
     } else this.groups = [];
@@ -139,9 +141,9 @@ export class GroupsPage {
     this.goToMainPage();
     await this.firebaseService.insertOne('activity', {
       type: 'addGroup',
-      userId: this.user.id,
-      groupId: newGroup.id,
-      date: this.commonService.getDate(),
+      userLogged: this.user,
+      group: { ...newGroup, ...group },
+      date: new Date().getTime(),
       img: this.user.imageUrl || this.user.img,
       message: `${this.user.name} ha creado el grupo ${group.name}`
     })
@@ -152,9 +154,9 @@ export class GroupsPage {
     this.goToMainPage();
     await this.firebaseService.insertOne('activity', {
       type: 'editGroup',
-      userId: this.user.id,
-      groupId: group.id,
-      date: this.commonService.getDate(),
+      userLogged: this.user,
+      group: group,
+      date: new Date().getTime(),
       img: this.user.imageUrl || this.user.img,
       message: `${this.user.name} ha editado el grupo ${group.name}`
     })
@@ -190,6 +192,7 @@ export class GroupsPage {
 
   goToMainPage = async () => {
     this.slideTo(1);
+    this.page = 1;
   }
 
 }

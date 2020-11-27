@@ -64,7 +64,6 @@ export class UserListComponent implements OnInit {
   }
 
   editGroup(group: Group) {
-    console.log(group);
     this.onEditGroup.emit({ group });
   }
 

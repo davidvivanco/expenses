@@ -1,5 +1,6 @@
 <ion-list show-reorder="false" *ngIf="groups">
-    <ion-title class="toUpperCase mb-m" color="primary" size="small">Mis grupos</ion-title>
+    <ion-title class="toUpperCase mb-m fw-l" color="primary" size="small">Mis grupos</ion-title>
+
     <ion-item-sliding #slidingItem *ngFor="let group of groups;let i = index">
         <ion-item lines="none" (click)="clickInItem(group,slidingItem)">
             <ion-avatar slot="start">
@@ -8,7 +9,8 @@
             <ion-label>
                 <h2>{{group.name}} </h2>
             </ion-label>
-            <ion-badge mode="ios" color="primary">{{group.totalExpenses}} €</ion-badge>
+            <ion-badge *ngIf="group.totalExpenses" mode="ios" color="primary">{{group.totalExpenses}} €</ion-badge>
+            <ion-badge *ngIf="!group.totalExpenses" mode="ios" color="primary">0 €</ion-badge>
 
 
         </ion-item>

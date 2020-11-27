@@ -1,4 +1,6 @@
-<ion-content fullscreen class="animated fadeIn fast">
+<app-main-header *ngIf="page === 1" [title]=title></app-main-header>
+
+<ion-content>
     <ion-slides (ionSlideTouchEnd)="onSlidesMove()" #mainSlide [options]="slideOptions">
         <ion-slide>
             <ion-content class="ion-padding">
@@ -6,8 +8,7 @@
             </ion-content>
         </ion-slide>
         <ion-slide>
-            <ion-content fullscreen class="animated fadeIn fast">
-                <app-main-header [title]=title></app-main-header>
+            <ion-content fullscreen>
                 <app-groups-list [user]="user" [groups]="groups" (onActivity)="goToActivity($event)" (onEdit)="goEditGroupView($event)" (onClick)="goToUsers($event)"></app-groups-list>
                 <ion-fab class="mb-m mr-m" (click)=addGroup() horizontal="end" vertical="bottom" slot="fixed">
                     <ion-fab-button>
@@ -15,11 +16,12 @@
                         <ion-icon size="small" name="people"></ion-icon>
                     </ion-fab-button>
                 </ion-fab>
+
+
             </ion-content>
         </ion-slide>
         <ion-slide>
             <ion-content fullscreen class="animated fadeIn fast">
-                <app-main-header></app-main-header>
                 <app-activity *ngIf="activity" [groupName]="groupName" [activity]="activity"></app-activity>
             </ion-content>
         </ion-slide>

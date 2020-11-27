@@ -84,8 +84,8 @@ export class AddUserComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.createUserDataForm(this.user);
     this.avatarSelected = (this.user) ? this.user.img : null
+    this.createUserDataForm(this.user);
   }
 
   createUserDataForm(user: User): void {

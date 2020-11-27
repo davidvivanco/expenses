@@ -2,6 +2,8 @@ import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonItemSliding } from '@ionic/angular';
+import { Expense } from 'src/models/interfaces/expense.interface';
+import { Group } from 'src/models/interfaces/group.interface';
 import { User } from 'src/models/interfaces/user.interface';
 import { CommonService } from 'src/services/common.service';
 import { FirebaseService } from 'src/services/firebase.service';
@@ -18,6 +20,8 @@ export class ExpensesPage implements OnInit {
   public userId: string;
   public groupId: string;
   public user: User;
+  public userLogged: User;
+  public group: Group;
 
   constructor(
     private firebaseService: FirebaseService,
@@ -26,7 +30,9 @@ export class ExpensesPage implements OnInit {
     private userService: UserService,
     private commonService: CommonService
   ) {
-  
+    this.userService.getUser().then(user => {
+      this.userLogged = user;
+    });
   }
 
   ngOnInit() {
@@ -34,9 +40,16 @@ export class ExpensesPage implements OnInit {
       this.groupId = params.groupId;
       this.userId = params.userId;
       this.getUser();
+      this.getGroup();
       this.getExpenses()
 
     })
+  }
+
+  getGroup() {
+    this.firebaseService.findByOneQuery('groups', ['id', '==', this.groupId]).subscribe(groups => {
+      this.group = groups[0];
+    });
   }
 
   getUser() {
@@ -63,13 +76,19 @@ export class ExpensesPage implements OnInit {
   }
 
   addExpense() {
-    this.commonService.addExpenseAlert(this.user,  this.groupId)
+    this.commonService.addExpenseAlert(this.user, this.group, this.userLogged)
+  }
+
+  seeDetails(expense: Expense, sliding: IonItemSliding) {
+    sliding.close();
+    this.commonService.addExpenseAlert(this.user, this.group, this.userLogged, { expense, readonly: true })
   }
 
   editExpense(expense: any, slidingItem?: IonItemSliding) {
+    console.log('data', this.group, this.userLogged);
     slidingItem.close()
     console.log(expense);
-    this.commonService.addExpenseAlert(this.user,  this.groupId, expense)
+    this.commonService.addExpenseAlert(this.user, this.group, this.userLogged, { expense })
 
   }
 

@@ -3,9 +3,10 @@ import { Group } from './group.interface';
 import { User } from './user.interface';
 
 export interface Activity {
+    id?: string,
     type?: string,
     userId?: string,
-    userName?: string,
+    userLogged?: User,
     user?: User,
     groupId?: string,
     group?: Group,

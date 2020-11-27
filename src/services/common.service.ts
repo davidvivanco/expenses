@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { Activity } from 'src/models/interfaces/activity.interface';
 import { Expense } from 'src/models/interfaces/expense.interface';
 import { Group } from 'src/models/interfaces/group.interface';
 import { User } from 'src/models/interfaces/user.interface';
-import { ActivityService } from './activity.service';
 import { FirebaseService } from './firebase.service';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class CommonService {
   constructor(
     public alertController: AlertController,
     private firebaseService: FirebaseService,
-    private activityService: ActivityService
+
   ) { }
 
 
@@ -48,50 +48,86 @@ export class CommonService {
 
   async deleteDocuments(collection, id) {
     if (collection === 'groups') {
-      await this.firebaseService.deleteDocument(collection, id);
-      const fakeUsers: any = await this.firebaseService.getUsers(id);
-      for (const user of fakeUsers) {
-        await this.firebaseService.deleteDocument('users', user.id);
-      }
+      await this.deleteAllActivity(id, 'group.id', '==');
+      await this.deleteAllExpenses(id, 'groupId', '==');
+      await this.deleteAllUsers(id);
+    } else if (collection === 'users') {
+      await this.deleteAllExpenses(id, 'userId', '==');
     }
-    else await this.firebaseService.deleteDocument(collection, id);
+
+    await this.firebaseService.deleteDocument(collection, id);
 
   }
 
-  async addExpenseAlert(user: User, groupId: string, expense?: Expense) {
+  async deleteAllExpenses(id: string, fieldToQuery: string, operator: any) {
+    const expenses: Array<Expense> = await this.firebaseService
+      .getElementsByOneQuery('expenses', id, fieldToQuery, operator);
+
+    for (const expense of expenses) {
+      await this.firebaseService.deleteDocument('expenses', expense.id);
+    }
+  }
+
+  async deleteAllActivity(id: string, fielToQuery, operator) {
+    const allActivity: Array<Activity> = await this.firebaseService
+      .getElementsByOneQuery('activity', id, fielToQuery, operator)
+
+    for (const activity of allActivity) {
+      if (activity.type !== 'deleteGroup') {
+        await this.firebaseService.deleteDocument('activity', activity.id);
+      }
+    }
+  }
+
+  async deleteAllUsers(groupId) {
+    const fakeUsers: any = await this.firebaseService.getUsers(groupId);
+    for (const user of fakeUsers) {
+      await this.firebaseService.deleteDocument('users', user.id);
+    }
+  }
+
+  async addExpenseAlert(user: User, group: Group, userLogged: User, opts?:
+    { expense?: Expense, users?: Array<User>, readonly?: boolean }) {
+    const readonly = opts ? opts.readonly : null;
+    let expense = opts ? opts.expense : null;
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Nuevo gasto para ' + user.name,
+      header:(expense)?`Gasto ${expense.concept}`: 'Nuevo gasto para ' + user.name,
       inputs: [
         {
           name: 'concept',
           value: expense ? expense.concept : '',
           id: 'concept',
           type: 'text',
+          disabled: readonly,
           placeholder: 'Concepto'
         },
         {
           name: 'details',
           id: 'details',
-          value: expense ? expense.details : '',
+          value:expense ? expense.details : '',
           type: 'textarea',
+          disabled: readonly,
           placeholder: 'Detalles'
         },
         {
           name: 'date',
           type: 'date',
-          value: expense ? expense.date : this.getDate()
+          disabled: readonly,
+          value: expense ? expense.date : this.getDate(new Date().getTime())
         },
         {
           name: 'time',
-          value: expense ? expense.time : '',
-          type: 'time'
+          value: expense ? expense.time : this.getTime(new Date().getTime()),
+          type: 'time',
+          disabled:readonly,
         },
         {
           name: 'expense',
           placeholder: 'Cantidad',
           value: expense ? expense.expense : '',
           type: 'number',
+          disabled:readonly,
           min: 0
         }
       ],
@@ -107,23 +143,29 @@ export class CommonService {
         {
           text: 'Ok',
           handler: async (data) => {
+            console.log(data);
             data.expense = Number(data.expense);
             data.userId = user.id;
-            data.groupId = groupId;
+            data.groupId = group.id;
             let type: string;
             if (expense) {
               type = 'editExpense';
               await this.firebaseService.updateById('expenses', expense.id, data)
             } else {
               type = 'addExpense';
-              expense = await this.firebaseService.insertOne('expenses', data)
+              const res: any = await this.firebaseService.insertOne('expenses', data);
+              expense = { ...res, ...data }
             }
+
+            if (opts.users) this.getTotalExpensesPerUser(opts.users);
 
             await this.firebaseService.insertOne('activity', {
               type,
-              expense: expense,
-              groupId,
-              date: this.getDate(),
+              expense,
+              user,
+              userLogged,
+              group,
+              date: new Date().getTime()
             })
           }
         }
@@ -134,15 +176,25 @@ export class CommonService {
 
   }
 
-  getDate() {
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    let day: any = new Date().getDate()
+  getDate(date: any) {
+
+    date = new Date(date);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    let day: any = date.getDate();
     day = (day >= 10) ? day : `0${day}`
     return `${year}-${month}-${day}`
   }
 
-  getTime() {
-    return `${new Date().getHours()}:${new Date().getMinutes()}`
+  getTime(date: any) {
+    date = new Date(date)
+    return `${date.getHours()}:${date.getMinutes()}`
+  }
+
+  async getTotalExpensesPerUser(users: Array<User>) {
+    for (const user of users) {
+      console.log('USER', user);
+      user.totalExpenses = await this.firebaseService.getTotalExpenses(user.id, 'userId')
+    }
   }
 }

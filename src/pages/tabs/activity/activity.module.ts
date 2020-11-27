@@ -3,19 +3,21 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab2Page } from './tab2.page';
+import { ActivityPage } from './activity.page';
 import { ExploreContainerComponentModule } from '../../explore-container/explore-container.module';
 
-import { Tab2PageRoutingModule } from './tab2-routing.module';
+import { ActivityPageRoutingModule } from './activity-routing.module';
+import { ComponentsModule } from 'src/components/components.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
+    ComponentsModule,
     ExploreContainerComponentModule,
-    Tab2PageRoutingModule
+    ActivityPageRoutingModule
   ],
-  declarations: [Tab2Page]
+  declarations: [ActivityPage]
 })
 export class Tab2PageModule {}

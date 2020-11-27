@@ -1,8 +1,7 @@
-<ion-header class="animated fadeIn fast" translucent class="ion-no-border">
-    <ion-toolbar class="mt-m">
-        <ion-icon *ngIf="showGoBackButton" (click)="goBack()" size="large" slot="start" class="ml-l" color="primary" name="arrow-back-circle">
+<ion-header class="animated fadeIn fast ion-no-border" translucent>
+    <ion-toolbar style="margin: 0;" class="mt-m">
+        <ion-icon *ngIf="showGoBackButton" (click)="goBack()" size="large" slot="start" class="ml-l" name="arrow-back-circle">
         </ion-icon>
-        <!-- <ion-title size="small">Hola {{user.name}}</ion-title> -->
         <ion-buttons class="mr-m" slot="end">
             <ion-item lines="none">
                 <ion-avatar>

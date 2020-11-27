@@ -23,12 +23,12 @@
             </div>
         </ion-item>
         <div style="text-align: center;">
-            <ion-title class="toUpperCase mt-m" color="primary" size="small">Gastos de {{user.name}}</ion-title>
+            <ion-title class="toUpperCase mt-m fw-l" color="primary" size="small">Gastos de {{user.name}}</ion-title>
         </div>
         <ion-list show-reorder="false">
             <ion-item-sliding #slidingItem *ngFor="let expense of expenses;let i = index">
 
-                <ion-item lines="none" (click)="clickInItem(user,slidingItem)">
+                <ion-item lines="none" (click)="seeDetails(expense,slidingItem)">
                     <ion-label slot="start">
                         {{expense.concept}}
                     </ion-label>

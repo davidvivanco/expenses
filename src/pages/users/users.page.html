@@ -10,12 +10,47 @@
             <ion-content fullscreen class="animated fadeIn fast">
                 <app-main-header [showGoBackButton]="true" (onGoBack)=goBack() [title]="title"></app-main-header>
                 <app-user-list *ngIf="users" [users]="users" [group]="group" (onActivity)="goToActivity($event)" (onEditUser)="goEditUserView($event)" (onAddExpense)="addExpense($event)" (onEditGroup)="editGroup($event)"></app-user-list>
-                <ion-fab class="mb-m mr-m" (click)=addUser() horizontal="end" vertical="bottom" slot="fixed">
+                <!-- <ion-fab class="mb-m mr-m" (click)=addUser() horizontal="end" vertical="bottom" slot="fixed">
                     <ion-fab-button>
                         <ion-icon name="person-add"></ion-icon>
                     </ion-fab-button>
-                </ion-fab>
+                </ion-fab> -->
 
+                <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+                    <ion-fab-button>
+                        <ion-icon name="add"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-list side="top">
+                        <ion-fab-button color="secondary" (click)=addUser()>
+                            <ion-icon name="people-outline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button color="tertiary">
+                            <ion-icon name="share-social-outline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button color="success">
+                            <ion-icon name="calculator-outline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button color="danger">
+                            <ion-icon name="reload-outline"></ion-icon>
+                        </ion-fab-button>
+
+                    </ion-fab-list>
+                    <ion-fab-list side="start">
+
+                        <ion-fab-button color="secondary">
+                            <ion-icon name="chatbox-outline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button color="tertiary" (click)="activityGroup()">
+                            <ion-icon name="pulse-outline"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button color="success" (click)="editGroup()">
+                            <ion-icon name="create"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-button (click)="deleteGroup()" color="danger">
+                            <ion-icon name="trash"></ion-icon>
+                        </ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab>
             </ion-content>
         </ion-slide>
         <ion-slide>

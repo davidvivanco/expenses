@@ -73,7 +73,8 @@ export class UsersPage implements OnInit {
     });
   }
 
-  async getTotalExpensesPerUser(users: Array<User>) {
+  async getTotalExpensesPerUser(users?: Array<User>) {
+    if (!users) users = this.users;
     for (const user of users) {
       user.totalExpenses = await this.firebaseService.getTotalExpenses(user.id, 'userId')
     }
@@ -118,10 +119,8 @@ export class UsersPage implements OnInit {
   }
 
   editGroup(e: any) {
-    if (e.slidingItem) e.slidingItem.close()
-    if (e.group.mode) {
-      this.router.navigate([`/tabs/groups`], { queryParams: { groupId: e.group.id } })
-    }
+      this.router.navigate([`/tabs/groups`], { queryParams: { groupId: this.groupId } })
+
   }
 
   goEditUserView(user: User) {
@@ -138,10 +137,11 @@ export class UsersPage implements OnInit {
     this.goToMainPage();
     await this.firebaseService.insertOne('activity', {
       type: 'editUser',
-      userId: this.userLogged.id,
+      userLogged: this.userLogged,
+      user: user,
       img: this.userLogged.imageUrl || this.userLogged.img,
-      groupId: this.groupId,
-      date: this.commonService.getDate(),
+      group: this.group,
+      date: new Date().getTime(),
       message: `${this.userLogged.name} ha editado al usuario ${user.name}`
     })
   }
@@ -162,10 +162,11 @@ export class UsersPage implements OnInit {
       this.slideTo(1);
       await this.firebaseService.insertOne('activity', {
         type: 'addUser',
-        userId: this.userLogged.id,
+        userLogged: this.userLogged,
+        user,
         img: this.userLogged.imageUrl || this.userLogged.img,
-        groupId: this.groupId,
-        date: this.commonService.getDate(),
+        group: this.group,
+        date: new Date().getTime(),
         message: `${this.userLogged.name} ha añadido al usuario ${user.name}`
       })
     }
@@ -195,10 +196,26 @@ export class UsersPage implements OnInit {
 
   async addExpense(user: User) {
     await this.addExpenseModal(user)
+
+  }
+
+  activityGroup(group: Group) {
+    this.router.navigate([`/tabs/groups`], { queryParams: { groupId: this.groupId, activity: true } })
+  }
+
+  async deleteGroup() {
+    await this.commonService.deleteWarningAlert({
+      collection: 'groups',
+      id: this.groupId,
+      header: 'Eliminar grupo A',
+      message: 'Estas seguro',
+      element: this.group
+    })
   }
 
   async addExpenseModal(user: User) {
-    //await this.commonService.addExpenseAlert(user, this.userLogged, this.groupId);
+    await this.commonService
+      .addExpenseAlert(user, this.group, this.userLogged, { users: this.users });
 
   }
 

@@ -1,21 +1,16 @@
 <ion-item lines="none" style="text-align: center;">
-    <ion-title class="toUpperCase mb-s" color="primary" size="small">Actividad de {{groupName}}</ion-title>
+    <ion-title class="toUpperCase mb-s" color="primary" size="small">Actividad de {{groupName ? groupName : 'tus grupos'}}</ion-title>
 </ion-item>
 
-<ion-card *ngFor="let element of activity">
+<ion-list *ngIf="userLogged">
+    <ion-item lines="none" *ngFor="let element of activity">
+        <ion-avatar slot="start">
+            <img src="{{element.userLogged.imageUrl}}">
+        </ion-avatar>
+        <ion-label>
+            <h3>{{generateMessage(element)}}</h3>
+            <p>{{commonService.getDate(element.date)}} - {{commonService.getTime(element.date)}} </p>
+        </ion-label>
+    </ion-item>
 
-    <ion-card-content>
-        <ion-item lines="none">
-            <ion-avatar slot="start">
-                <img src="{{element.img}}">
-            </ion-avatar>
-            <ion-card-content>{{element.message}}
-                <p><small> {{element.date}} </small></p>
-            </ion-card-content>
-
-        </ion-item>
-    </ion-card-content>
-    <!-- <ion-card-content style="text-align: left;">
-    </ion-card-content> -->
-
-</ion-card>
+</ion-list>
